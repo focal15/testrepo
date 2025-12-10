@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta http-equiv="Content-Style-Type" content="text/css">
+  <title></title>
+  <meta name="Generator" content="Cocoa HTML Writer">
+  <meta name="CocoaVersion" content="2685.2">
+  <style type="text/css">
+    p.p1 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.6px '.AppleSystemUIFontMonospaced'; color: #181a1e; -webkit-text-stroke: #181a1e; background-color: #f4f6f9}
+    p.p2 {margin: 0.0px 0.0px 0.0px 0.0px; font: 13.6px '.AppleSystemUIFontMonospaced'; color: #181a1e; -webkit-text-stroke: #181a1e; background-color: #f4f6f9; min-height: 16.0px}
+    span.s1 {font-kerning: none}
+  </style>
+</head>
+<body>
+<p class="p1"><span class="s1">&lt;!DOCTYPE html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;html&gt;</span></p>
+<p class="p1"><span class="s1">&lt;head&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;title&gt;QR Code Capture&lt;/title&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/head&gt;</span></p>
+<p class="p1"><span class="s1">&lt;body&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;h1&gt;Scan the QR Code to Capture Your Image and IP Address&lt;/h1&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;video id="video" autoplay playsinline&gt;&lt;/video&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;canvas id="canvas"&gt;&lt;/canvas&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;p id="ipAddress"&gt;&lt;/p&gt;</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;script&gt;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const video = document.getElementById('video');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const canvas = document.getElementById('canvas');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const ctx = canvas.getContext('2d');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>const ipDisplay = document.getElementById('ipAddress');</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Get the user's IP address</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>fetch('https://api.ipify.org?format=json')</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.then(response =&gt; response.json())</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.then(data =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>ipDisplay.textContent = "Your IP Address: " + data.ip;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Access the webcam</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>navigator.mediaDevices.getUserMedia({ video: true })</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.then(stream =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>video.srcObject = stream;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>})</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>.catch(err =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">                </span>console.error("Error accessing webcam: ", err);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>});</span></p>
+<p class="p2"><span class="s1"></span><br></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>// Capture image from webcam</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>video.onplay = () =&gt; {</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.width = video.videoWidth;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>canvas.height = video.videoHeight;</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>ctx.drawImage(video, 0, 0, canvas.width, canvas.height);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>const imageData = canvas.toDataURL('image/png');</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>console.log("Captured image:", imageData);</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">            </span>// You can send this image to a server here</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">        </span>};</span></p>
+<p class="p1"><span class="s1"><span class="Apple-converted-space">    </span>&lt;/script&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/body&gt;</span></p>
+<p class="p1"><span class="s1">&lt;/html&gt;</span></p>
+</body>
+</html>
